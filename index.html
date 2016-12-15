@@ -1,11 +1,191 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>
-			WebTree
-		</title>
-	</head>
-	<body>
-		WebTree Official Website
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Premium Calculator - Motorcycle - Third Party Only</title>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <script src="./js/react.min.js"></script>
+    <script src="./js/react-dom.min.js"></script>
+    <script src="./js/browser.min.js"></script>
+    <script src="./js/numeral.min.js"></script>
+    <style>
+      .FiftyPer
+      {
+        width: 50%;
+      }
+      .ra
+      {
+        text-align: right;
+      }
+      .cc{
+        color: #CC0000;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div id="app"></div>
+    </div>
+    <script type="text/babel">
+      
+       var App = React.createClass({
+        
+        getInitialState: function(){
+          return {
+            thirdparty: 1500,
+            cccc: 125,
+            dddd: 1,
+            pppp: 1,
+            ddddV: 125,
+            ppppV: 125
+          };
+        },
+
+        calculate: function(cccc, dddd, pppp) {
+
+          if(isNaN(cccc)) cccc = 125;
+          if(isNaN(dddd)) dddd = 1;
+          if(isNaN(pppp)) cccc = 1;
+
+          this.setState({cccc: cccc})
+          this.setState({dddd: dddd})
+          this.setState({pppp: pppp})
+
+          if(cccc<150) {
+            this.setState({thirdparty: 1500})
+          }
+          else if(cccc >=150 && cccc < 250)
+          {
+            this.setState({thirdparty: 1700})
+          }
+          else
+          {
+            this.setState({thirdparty: 1900})
+          }
+
+          this.setState({ddddV: 125 * dddd})
+          this.setState({ppppV: 125 * pppp})
+
+
+        },
+
+        render: function(){
+          return (
+            <div>
+              <h1>Motorcycle Third Party Premium Calculator</h1>
+              <Form handleCalc={this.calculate}/>
+              <hr/>
+              <Result thirdparty={this.state.thirdparty} cccc={this.state.cccc} dddd={this.state.dddd} pppp={this.state.pppp} ddddV={this.state.ddddV} ppppV={this.state.ppppV}/>
+            </div>
+          );
+        }
+       });
+
+
+
+
+
+
+
+       var Form = React.createClass({
+        submit: function (e){
+          e.preventDefault();
+          this.props.handleCalc(this.refs.cccc.value, this.refs.dddd.value, this.refs.pppp.value);
+        },
+
+        render: function(){
+          return (
+            <form onSubmit={this.submit}>
+              <div className="row">
+                <div className="col-md-6">
+                  <div className="form-group">
+                    <label>Motorcycle CC</label>
+                    <input type="text" ref="cccc" className="form-control" placeholder="125 or 150 or 250 etc"/>
+                  </div>
+                </div>
+                <div className="col-md-3">
+                  <div className="form-group">
+                    <label>Rsdmdst for Driver</label>
+                    <input type="text" ref="dddd" className="form-control" placeholder="1,2,3,?"/>
+                  </div>
+                </div>
+                <div className="col-md-3">
+                  <div className="form-group">
+                    <label>Rsdmdst for Passenger</label>
+                    <input type="text" ref="pppp" className="form-control" placeholder="1,2,3,?"/>
+                  </div>
+                </div>
+              </div>
+              <button type="submit" className="btn btn-primary">Display Premium</button>
+            </form>
+          );
+        }
+
+       });
+
+
+
+
+
+       var Result = React.createClass({
+
+        
+        render: function(){
+          var total = this.props.ppppV + this.props.ddddV+this.props.thirdparty;
+          var taxable = total + 20;
+          var vat = taxable * 0.13;
+          var grand = taxable + vat; 
+
+          grand = numeral(grand).format('0,0.00');
+          vat = numeral(vat).format('0,0.00');
+          taxable = numeral(taxable).format('0,0.00');
+          total = numeral(total).format('0,0.00');
+
+          return (
+            <div>
+            <h4>Premium Calculation for <span className="cc">{this.props.cccc}</span> CC bike</h4>
+            <table className="table table-bordered table-striped FiftyPer">
+            <tbody>
+              <tr>
+                <td>Third Party</td><td>&nbsp;</td><td className="ra">{this.props.thirdparty}</td>
+              </tr>
+              <tr>
+                <td><strong>Subtotal A</strong></td><td>&nbsp;</td><td className="ra"><strong>{this.props.thirdparty}</strong></td>
+              </tr>
+              <tr>
+                <td>Rsdmdst for Driver</td><td>{this.props.dddd}</td><td className="ra">{this.props.ddddV}</td>
+              </tr>
+              <tr>
+                <td>Rsdmdst for Passenger</td><td>{this.props.pppp}</td><td className="ra">{this.props.ppppV}</td>
+              </tr>
+              <tr>
+                <td><strong>Pool Total A</strong></td><td>&nbsp;</td><td className="ra"><strong>{this.props.ppppV+this.props.ddddV}</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Total (A + B)</strong></td><td>&nbsp;</td><td className="ra"><strong>{total}</strong></td>
+              </tr>
+              <tr>
+                <td>Stamp Duty</td><td>&nbsp;</td><td className="ra">20.00</td>
+              </tr>
+              <tr>
+                <td><strong>Taxable</strong></td><td>&nbsp;</td><td className="ra"><strong>{taxable}</strong></td>
+              </tr>
+              <tr>
+                <td><strong>VAT</strong></td><td>&nbsp;</td><td className="ra"><strong>{vat}</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Grand Total Premium</strong></td><td>&nbsp;</td><td className="ra"><strong>{grand}</strong></td>
+              </tr>
+            </tbody>
+            </table>
+            </div>
+          );
+        }
+       });
+
+
+
+       ReactDOM.render(<App/>,document.getElementById('app'));
+    </script>
+  </body>
 </html>
