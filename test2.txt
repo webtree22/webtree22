@@ -1,8 +1,0 @@
-
-	{
-		"postId" : 1,
-		"postTitle" : "This is Post Title",
-		"slug": "this-is-post-title",
-		"content": "blah blah blah",
-	}
-	
